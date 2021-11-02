@@ -1,5 +1,0 @@
-/env/
-/venv/
-*.pyc
-.mypy_cache
-.download

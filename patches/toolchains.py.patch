@@ -1,0 +1,20 @@
+--- llvm_android/toolchains.py	2021-11-03 05:33:42.968074724 +0800
++++ ndk-aarch64-linux/llvm_android/toolchains.py	2021-11-03 05:34:23.248074709 +0800
+@@ -115,7 +115,7 @@ class Toolchain:
+     @property
+     def lib_dir(self) -> Path:
+         """Returns the path to lib dir."""
+-        return self.path / 'lib64'
++        return self.path / 'lib'
+ 
+     @property
+     def _version_file(self) -> Path:
+@@ -139,7 +139,7 @@ class Toolchain:
+ 
+     @property
+     def libcxx_headers(self) -> Path:
+-        return self.path / 'include' / 'c++' / 'v1'
++        return self.path / 'include' / 'c++' / '10'
+ 
+ 
+ def get_prebuilt_toolchain() -> Toolchain:

@@ -1,0 +1,42 @@
+--- llvm_android/paths.py	2021-11-03 05:33:42.968074724 +0800
++++ ndk-aarch64-linux/llvm_android/paths.py	2021-11-03 05:34:23.248074709 +0800
+@@ -35,16 +35,15 @@ TOOLCHAIN_DIR: Path = ANDROID_DIR / 'too
+ TOOLCHAIN_UTILS_DIR: Path = EXTERNAL_DIR / 'toolchain-utils'
+ TOOLCHAIN_LLVM_PATH: Path = TOOLCHAIN_DIR / 'llvm-project'
+ 
+-CLANG_PREBUILT_DIR: Path = (PREBUILTS_DIR / 'clang' / 'host' / hosts.build_host().os_tag
+-                            / constants.CLANG_PREBUILT_VERSION)
+-CLANG_PREBUILT_LIBCXX_HEADERS: Path = CLANG_PREBUILT_DIR / 'include' / 'c++' / 'v1'
++CLANG_PREBUILT_DIR: Path = Path('/usr')
++CLANG_PREBUILT_LIBCXX_HEADERS: Path = CLANG_PREBUILT_DIR / 'include' / 'c++' / '10'
+ BIONIC_HEADERS: Path = ANDROID_DIR / 'bionic' / 'libc' / 'include'
+ BIONIC_KERNEL_HEADERS: Path = ANDROID_DIR / 'bionic' / 'libc' / 'kernel' / 'uapi'
+ 
+ GO_BIN_PATH: Path = PREBUILTS_DIR / 'go' / hosts.build_host().os_tag / 'bin'
+-CMAKE_BIN_PATH: Path = PREBUILTS_DIR / 'cmake' / hosts.build_host().os_tag / 'bin' / 'cmake'
+-MAKE_BIN_PATH: Path = PREBUILTS_DIR / 'build-tools' / hosts.build_host().os_tag / 'bin' / 'make'
+-NINJA_BIN_PATH: Path = PREBUILTS_DIR / 'build-tools' / hosts.build_host().os_tag / 'bin' / 'ninja'
++CMAKE_BIN_PATH: Path = Path('/usr/bin/cmake')
++MAKE_BIN_PATH: Path = Path('/usr/bin/make')
++NINJA_BIN_PATH: Path = Path('/usr/bin/ninja')
+ 
+ LIBNCURSES_SRC_DIR: Path = EXTERNAL_DIR / 'libncurses'
+ LIBEDIT_SRC_DIR: Path = EXTERNAL_DIR / 'libedit'
+@@ -57,7 +56,7 @@ NDK_LIBCXX_HEADERS: Path = NDK_BASE / 's
+ NDK_LIBCXXABI_HEADERS: Path = NDK_BASE / 'sources' / 'cxx-stl' / 'llvm-libc++abi' / 'include'
+ NDK_SUPPORT_HEADERS: Path = NDK_BASE / 'sources' / 'android' / 'support' / 'include'
+ 
+-GCC_ROOT: Path = PREBUILTS_DIR / 'gcc' / hosts.build_host().os_tag
++GCC_ROOT: Path = Path('/usr')
+ MINGW_ROOT: Path = PREBUILTS_DIR / 'gcc' / 'linux-x86' / 'host' / 'x86_64-w64-mingw32-4.8' / 'x86_64-w64-mingw32'
+ 
+ _WIN_ZLIB_PATH: Path = (PREBUILTS_DIR / 'clang' / 'host' / 'windows-x86' /
+@@ -95,7 +94,7 @@ def get_package_install_path(host: hosts
+ 
+ def get_python_dir(host: hosts.Host) -> Path:
+     """Returns the path to python for a host."""
+-    return PREBUILTS_DIR / 'python' / host.os_tag
++    return Path(  '/usr')
+ 
+ def get_python_executable(host: hosts.Host) -> Path:
+     """Returns the path to python executable for a host."""

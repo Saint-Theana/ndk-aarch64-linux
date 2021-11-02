@@ -1,0 +1,77 @@
+--- llvm_android/base_builders.py	2021-11-03 05:33:42.948074724 +0800
++++ ndk-aarch64-linux/llvm_android/base_builders.py	2021-11-03 05:34:23.238074709 +0800
+@@ -213,8 +213,8 @@ class AutoconfBuilder(Builder):
+         cflags = super().cflags
+         cflags.append('-fPIC')
+         cflags.append('-Wno-unused-command-line-argument')
+-        if self._config.sysroot:
+-            cflags.append(f'--sysroot={self._config.sysroot}')
++        #if self._config.sysroot:
++        #    cflags.append(f'--sysroot={self._config.sysroot}')
+         if self._config.target_os.is_darwin:
+             sdk_path = self._get_mac_sdk_path()
+             cflags.append(f'-mmacosx-version-min={constants.MAC_MIN_VERSION}')
+@@ -233,9 +233,9 @@ class AutoconfBuilder(Builder):
+     def ldflags(self) -> List[str]:
+         ldflags = super().ldflags
+         if self._config.target_os.is_darwin:
+-            ldflags.append('-Wl,-rpath,@loader_path/../lib64')
++            ldflags.append('-Wl,-rpath,@loader_path/../lib')
+         if self._config.target_os.is_linux:
+-            ldflags.append('-Wl,-rpath,$ORIGIN/../lib64')
++            ldflags.append('-Wl,-rpath,$ORIGIN/../lib')
+         return ldflags
+ 
+     @property
+@@ -362,7 +362,7 @@ class CMakeBuilder(Builder):
+             'CMAKE_BUILD_TYPE': 'Release',
+             'CMAKE_INSTALL_PREFIX': str(self.install_dir),
+ 
+-            'CMAKE_MAKE_PROGRAM': str(paths.NINJA_BIN_PATH),
++            'CMAKE_MAKE_PROGRAM': str(paths.MAKE_BIN_PATH),
+ 
+             'CMAKE_FIND_ROOT_PATH_MODE_INCLUDE': 'ONLY',
+             'CMAKE_FIND_ROOT_PATH_MODE_LIBRARY': 'ONLY',
+@@ -405,7 +405,7 @@ class CMakeBuilder(Builder):
+                 shutil.rmtree(os.path.join(dirpath, 'CMakeFiles'))
+ 
+     def _ninja(self, args: list[str]) -> None:
+-        ninja_cmd = [str(paths.NINJA_BIN_PATH)] + args
++        ninja_cmd = [str(paths.MAKE_BIN_PATH)] + args
+         utils.check_call(ninja_cmd, cwd=self.output_dir, env=self.env)
+ 
+     def _build_config(self) -> None:
+@@ -415,7 +415,7 @@ class CMakeBuilder(Builder):
+         if self.remove_install_dir and self.install_dir.exists():
+             shutil.rmtree(self.install_dir)
+ 
+-        cmake_cmd: List[str] = [str(paths.CMAKE_BIN_PATH), '-G', 'Ninja']
++        cmake_cmd: List[str] = [str(paths.CMAKE_BIN_PATH), '-G', 'Unix Makefiles']
+ 
+         cmake_cmd.extend(f'-D{key}={val}' for key, val in self.cmake_defines.items())
+         cmake_cmd.append(str(self.src_dir))
+@@ -425,13 +425,13 @@ class CMakeBuilder(Builder):
+         env = self.env
+         utils.create_script(self.output_dir / 'cmake_invocation.sh', cmake_cmd, env)
+         utils.check_call(cmake_cmd, cwd=self.output_dir, env=env)
+-
++        self.ninja_targets.append("-j8")
+         self._ninja(self.ninja_targets)
+         self.install_config()
+ 
+     def install_config(self) -> None:
+         """Installs built artifacts for current config."""
+-        utils.check_call([paths.NINJA_BIN_PATH, 'install'],
++        utils.check_call([paths.MAKE_BIN_PATH, 'install'],
+                          cwd=self.output_dir, env=self.env)
+ 
+ 
+@@ -591,7 +591,7 @@ class LLVMBuilder(LLVMBaseBuilder):
+             defines['LLDB_ENABLE_CURSES'] = 'OFF'
+ 
+     def _install_lldb_deps(self) -> None:
+-        lib_dir = self.install_dir / ('bin' if self._config.target_os.is_windows else 'lib64')
++        lib_dir = self.install_dir / ('bin' if self._config.target_os.is_windows else 'lib')
+         lib_dir.mkdir(exist_ok=True, parents=True)
+ 
+         if self.swig_executable:

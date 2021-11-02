@@ -1,0 +1,42 @@
+--- llvm_android/configs.py	2021-11-03 05:33:42.958074724 +0800
++++ ndk-aarch64-linux/llvm_android/configs.py	2021-11-03 05:34:23.248074709 +0800
+@@ -156,9 +156,9 @@ class _GccConfig(_BaseConfig):  # pylint
+         gcc_lib_dir = self.gcc_root / 'lib' / 'gcc' / self.gcc_triple / self.gcc_ver
+         if self.is_32_bit:
+             gcc_lib_dir = gcc_lib_dir / '32'
+-            gcc_builtin_dir = self.gcc_root / self.gcc_triple / 'lib32'
++            gcc_builtin_dir = self.gcc_root/'lib' / self.gcc_triple
+         else:
+-            gcc_builtin_dir = self.gcc_root / self.gcc_triple / 'lib64'
++            gcc_builtin_dir = self.gcc_root/'lib' / self.gcc_triple
+         return [gcc_lib_dir, gcc_builtin_dir]
+ 
+ 
+@@ -166,10 +166,10 @@ class LinuxConfig(_GccConfig):
+     """Configuration for Linux targets."""
+ 
+     target_os: hosts.Host = hosts.Host.Linux
+-    sysroot: Optional[Path] = (paths.GCC_ROOT / 'host' / 'x86_64-linux-glibc2.17-4.8' / 'sysroot')
+-    gcc_root: Path = (paths.GCC_ROOT / 'host' / 'x86_64-linux-glibc2.17-4.8')
+-    gcc_triple: str = 'x86_64-linux'
+-    gcc_ver: str = '4.8.3'
++    sysroot: Optional[Path] = Path('/')
++    gcc_root: Path = Path('/usr')
++    gcc_triple: str = 'aarch64-linux-gnu'
++    gcc_ver: str = '10'
+ 
+     @property
+     def ldflags(self) -> List[str]:
+@@ -351,7 +351,11 @@ class AndroidConfig(_BaseConfig):
+             # For the NDK, the sysroot has the C++ headers, but for the
+             # platform, we need to add the headers manually.
+             cxxflags.append('-nostdinc++')
+-            cxxflags.extend(f'-isystem {d}' for d in self._libcxx_header_dirs)
++            for d in self._libcxx_header_dirs:
++                if(d==Path('/usr/include/c++/10')):
++                    cxxflags.append('-isystem '+'/root/llvm-toolchain/out/stage2-install/include/c++/10')
++                else:
++                    cxxflags.append(f'-isystem {d}')
+         return cxxflags
+ 
+     @property
