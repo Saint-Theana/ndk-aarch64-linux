@@ -16,7 +16,7 @@ if ! ls /usr/bin/clang;then
 fi
 
 # some tool we need
-apt install libexpat-dev bison python git curl wget make -y
+apt install libexpat-dev bison python git curl wget make tar -y
 curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo
 chmod a+x /bin/repo
 git config --global user.email "you@example.com"
