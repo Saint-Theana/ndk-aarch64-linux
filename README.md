@@ -122,6 +122,7 @@ cd llvm-toolchain
 
 ## 3:build
 ```shell
+cd
 cd llvm-toolchain
 python3 toolchain/llvm_android/build.py --no-build windows
 ```
