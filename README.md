@@ -134,6 +134,7 @@ cd llvm-toolchain
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/lib64
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/lib
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/share
+rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/python3
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/test
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/prebuilt_include
 rm -r toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/AndroidVersion.txt
@@ -149,6 +150,7 @@ cp -r out/install/linux-x86/clang-dev/lib64 /opt/android-ndk-r23/toolchains/llvm
 cp -r out/install/linux-x86/clang-dev/share /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
 cp -r out/install/linux-x86/clang-dev/test /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
 cp -r out/install/linux-x86/clang-dev/prebuilt_include /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/python3 /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
 
 ```
 
