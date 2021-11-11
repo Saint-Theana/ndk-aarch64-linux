@@ -86,11 +86,11 @@ cd
 cd llvm-toolchain
 cd toolchain
 git clone https://github.com/Saint-Theana/llvm_android_aarch64_patch
-cp llvm_android llvm_android_origin
+cp -r llvm_android llvm_android_origin
 cd llvm_android
-for i in $(ls ../llvm_android_aarch64_patch)
+for i in $(ls ../llvm_android_aarch64_patch/ubuntu_build)
 do
-    patch -p1 <../llvm_android_aarch64_patch/$i
+    patch -p1 <../llvm_android_aarch64_patch/ubuntu_build/$i
 done
 cd
 cd llvm-toolchain
@@ -121,7 +121,7 @@ cmake -G "Unix Makefiles" \
     -DCMAKE_INSTALL_PREFIX=~/llvm-toolchain/toolchain/prebuilts/ndk/r23/shader-tools/linux-aarch64 \
     ..
 make -j8
-make install
+make install -j8
 cd
 cd llvm-toolchain
 python3 toolchain/llvm_android/build.py --no-build windows

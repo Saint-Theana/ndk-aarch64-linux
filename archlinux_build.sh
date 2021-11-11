@@ -1,56 +1,24 @@
 #/l!/bin/bash
 
-echo 'deb [trusted=yes] http://apt.llvm.org/bionic/ llvm-toolchain-bionic-13 main' >>/etc/apt/sources.list
-apt update
-apt install clang-13 lld-13 libc++1-13 -y
+pacman -S  --noconfirm clang llvm lld libc++ --overwrite '*'
 #link toolchains
 if ! ls /usr/bin/clang;then
   cd /usr/bin
-  for i in $(ls *-13)
+  for i in $(ls *-12)
   do
-    ln -s $i $(echo $i|sed 's/-13//g')
+    ln -s $i $(echo $i|sed 's/-12//g')
   done
 fi
 
 # some tool we need
-apt remove python3 -y
-apt install libexpat-dev bison python git curl wget make tar -y
+
+pacman -S --noconfirm expat bison python git rsync curl wget make tar go python3 cmake --overwrite '*'
 curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo
 chmod a+x /bin/repo
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
+git config --global user.email "Saint-Theana@github.com"
+git config --global user.name "Saint-Theana"
 
-# the latest python version in official apt source is 3.6,we need newer.
-cd
-if ! python3 --version ;then
-  wget -c https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
-  tar xvf Python-3.9.1.tgz
-  cd Python-3.9.1
-  ./configure --prefix=/usr/local/python3.9 --enable-ipv6 --enable-loadable-sqlite-extensions  --with-dbmliborder=bdb:gdbm --with-computed-gotos --without-ensurepip --with-system-expat  --with-system-ffi CC=clang CXX=clang++ LD=ld.lld --enable-shared
-  make -j8
-  make install 
-  rm /usr/bin/python3
-  echo -e "#!/bin/bash\nLD_LIBRARY_PATH=/usr/local/python3.9/lib /usr/local/python3.9/bin/python3 \$@">/usr/bin/python3
-  chmod 755 /usr/bin/python3
-fi
 
-# the latest cmake version in official apt source is 3.10,we need newer.
-cd
-if ! cmake;then
-  wget -c https://github.com/Kitware/CMake/releases/download/v3.22.0-rc2/cmake-3.22.0-rc2-linux-aarch64.tar.gz
-  tar xvf cmake-3.22.0-rc2-linux-aarch64.tar.gz
-  cp -r cmake-3.22.0-rc2-linux-aarch64/* /usr/local
-fi
-cd
-
-# the latest golang version in official apt source is 1.10,we need newer.
-cd
-if ! go env;then
-wget -c https://golang.org/dl/go1.17.3.linux-arm64.tar.gz
-tar xvf go1.17.3.linux-arm64.tar.gz -C /usr/local
-ln -s /usr/local/go/bin/go /usr/bin
-fi
-cd
 
 
 
@@ -86,11 +54,11 @@ cd
 cd llvm-toolchain
 cd toolchain
 git clone https://github.com/Saint-Theana/llvm_android_aarch64_patch
-cp llvm_android llvm_android_origin
+cp -r llvm_android llvm_android_origin
 cd llvm_android
-for i in $(ls ../llvm_android_aarch64_patch)
+for i in $(ls ../llvm_android_aarch64_patch/archlinux_build)
 do
-    patch -p1 <../llvm_android_aarch64_patch/$i
+    patch -p1 <../llvm_android_aarch64_patch/archlinux_build/$i
 done
 cd
 cd llvm-toolchain
@@ -109,6 +77,7 @@ git clone --depth=1 https://github.com/google/effcee.git
 git clone --depth=1 https://github.com/google/re2.git
 git clone --depth=1 https://github.com/KhronosGroup/glslang.git
 # start building shaderc...
+if ! cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake;then
 sed -i '1i\include(CheckCXXCompilerFlag)' ./CMakeLists.txt
 mkdir build && cd build
 # setting android ndk toolchain
@@ -121,7 +90,8 @@ cmake -G "Unix Makefiles" \
     -DCMAKE_INSTALL_PREFIX=~/llvm-toolchain/toolchain/prebuilts/ndk/r23/shader-tools/linux-aarch64 \
     ..
 make -j8
-make install
+make install -j8
+fi
 cd
 cd llvm-toolchain
 python3 toolchain/llvm_android/build.py --no-build windows
