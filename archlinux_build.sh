@@ -110,9 +110,9 @@ do
       rm toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/bin/$i
   fi
 done
-cp -r out/install/linux-x86/clang-dev/bin/* /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/bin
-cp -r out/install/linux-x86/clang-dev/lib /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
-cp -r out/install/linux-x86/clang-dev/lib64 /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
-cp -r out/install/linux-x86/clang-dev/share /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
-cp -r out/install/linux-x86/clang-dev/test /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
-cp -r out/install/linux-x86/clang-dev/prebuilt_include /opt/android-ndk-r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/bin/* toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/bin
+cp -r out/install/linux-x86/clang-dev/lib toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/lib64 toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/share toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/test toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/
+cp -r out/install/linux-x86/clang-dev/prebuilt_include toolchain/prebuilts/ndk/r23/toolchains/llvm/prebuilt/linux-aarch64/
